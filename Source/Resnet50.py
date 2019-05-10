@@ -6,13 +6,16 @@ import matplotlib.pyplot as plt
 import torch
 import torchvision
 import torchvision.transforms as transforms
+from torch.optim.lr_scheduler import MultiStepLR
 
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data.sampler import SubsetRandomSampler
 
-BATCHSIZE = 64
+BATCHSIZE = 32
+SPLIT_RATIO = 1.0/8.0
+
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
 																		std=[0.229, 0.224, 0.225])
 TRAINTRANSFORMS = transforms.Compose([transforms.Resize(224),
@@ -24,10 +27,13 @@ TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
 																			normalize,
 																			])
 PRETRAINED = True
-LOSS = nn.CrossEntropyLoss()
+LOSS = nn.CrossEntropyLoss
 OPTIMIZER = optim.Adam
 LEARNINGRATE = 0.01
-NUMEPOCHS = 10
+TRAINING_MILESTONES = [8, 16, 20, 24, 28]
+LR_GAMMA = 0.1
+
+NUMEPOCHS = 30
 PRINT_FREQ = 100
 FILENAME = 'resnet50PretrainedBatch64.pth'
 
@@ -52,7 +58,7 @@ if skip_training:
 
 #TODO: Test below function
 
-def load_split_train_test(datadir, valid_size = .2):
+def load_split_train_test(datadir, valid_size = SPLIT_RATIO):
 
 	train_transforms = TRAINTRANSFORMS
 
@@ -99,14 +105,16 @@ net.fc = nn.Linear(net.fc.in_features, 47)
 net.to(device)
 
 #Training settings
-criterion = LOSS
+criterion = LOSS()
 optimizer = OPTIMIZER(net.parameters(), lr=LEARNINGRATE)
+lr_scheduler = MultiStepLR(optimizer, TRAINING_MILESTONES, gamma=LR_GAMMA, last_epoch=-1)
 n_epochs = NUMEPOCHS
 
 print("Starting Training.")
 #Training Loop
 for epoch in range(n_epochs):
 	net.train()
+	lr_scheduler.step(epoch)
 	running_loss = 0.0
 	print_every = PRINT_FREQ  # mini-batches
 	for i, (inputs, labels) in enumerate(trainloader, 0):

@@ -39,6 +39,8 @@ for dirName, _, files in os.walk(data_dir):
 		image_0 = np.expand_dims(image_array, 0)
 		probs = np.sort(model.predict(image_0)[0])
 		classes = np.argsort(model.predict(image_0)[0])
+		classes = classes.tolist()
+		probs = probs.tolist()
 		cumProb = 0.0
 		topClasses = []
 		while cumProb < 0.95:

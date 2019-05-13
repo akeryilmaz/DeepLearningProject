@@ -32,15 +32,17 @@ PRETRAINED = True
 LOSS = nn.CrossEntropyLoss
 OPTIMIZER = optim.Adam
 LEARNINGRATE = 0.01
-TRAINING_MILESTONES = []
+TRAINING_MILESTONES = [5,8]
 LR_GAMMA = 0.1
 
 NUMEPOCHS = 10
 PRINT_FREQ = 200
-FILENAME = 'resnet50PretrainedEpoch10.pth'
+FILENAME = 'resnet50PretrainedMilestone'
 
 #Set this to True if model is already trained
 skip_training = False
+
+log = open("../Doc/" + FILENAME + ".txt","w+")
 
 if os.path.isdir('../Data/threshold'):
 	data_dir = '../Data/threshold'
@@ -48,6 +50,7 @@ else:
 	#TODO Change the error given here.
 	raise Exception("Data directry not found!")
 
+log.write('The data directory is %s' % data_dir)
 print('The data directory is %s' % data_dir)
 
 # Select the device for training
@@ -112,7 +115,9 @@ optimizer = OPTIMIZER(net.parameters(), lr=LEARNINGRATE)
 lr_scheduler = MultiStepLR(optimizer, TRAINING_MILESTONES, gamma=LR_GAMMA, last_epoch=-1)
 n_epochs = NUMEPOCHS
 
+
 print("Starting Training.")
+log.write("Starting Training.")
 #Training Loop
 for epoch in range(n_epochs):
 	net.train()
@@ -136,6 +141,7 @@ for epoch in range(n_epochs):
 		running_loss += loss.item()
 		if (i % print_every) == (print_every-1):
 			print('[%d, %5d] loss: %.3f' % (epoch+1, i+1, running_loss/print_every))
+			log.write('[%d, %5d] loss: %.3f' % (epoch+1, i+1, running_loss/print_every))
 			running_loss = 0.0
 
 		if skip_training:
@@ -146,19 +152,23 @@ for epoch in range(n_epochs):
 	# Print accuracy after every epoch
 	accuracy = compute_accuracy(net, testloader)
 	print('Accuracy of the network on the test images: %.3f' % accuracy)
+	log.write('Accuracy of the network on the test images: %.3f' % accuracy)
 
+log.write('Finished Training')
 print('Finished Training')
 
 # Save the network to a file
-filename = FILENAME
+filename = "../Doc/"+ FILENAME + ".pth"
 if not skip_training:
 	try:
 		do_save = input('Do you want to save the model (type yes to confirm)? ').lower()
 		if do_save == 'yes':
 			torch.save(net.state_dict(), filename)
 			print('Model saved to %s' % filename)
+			log.write('Model saved to %s' % filename)
 		else:
 			print('Model not saved')
+			log.write('Model not saved')
 	except:
 		  raise Exception('The notebook should be run or validated with skip_training=True.')
 else:
@@ -168,9 +178,7 @@ else:
 	net.to(device)
 	print('Model loaded from %s' % filename)
 
-# Compute the accuracy on the test set
-accuracy = compute_accuracy(net, testloader)
-print('Accuracy of the network on the test images: %.3f' % accuracy)
+log.close() 
 
 
 

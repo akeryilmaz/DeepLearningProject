@@ -1,0 +1,154 @@
+
+
+BATCHSIZE = 32
+SPLIT_RATIO = 1.0/8.0
+
+normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+																		std=[0.229, 0.224, 0.225])
+TRAINTRANSFORMS = transforms.Compose([transforms.Resize(224),
+																		transforms.ToTensor(),
+																		normalize,
+																		])
+TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
+																			transforms.ToTensor(),
+																			normalize,
+																			])
+
+MODEL = torchvision.models.vgg19
+PRETRAINED = False
+LOSS = nn.CrossEntropyLoss
+OPTIMIZER = optim.Adam
+LEARNINGRATE = 0.0001
+TRAINING_MILESTONES = [5,8]
+LR_GAMMA = 0.1
+
+NUMEPOCHS = 10
+PRINT_FREQ = 200
+FILENAME = 'Vgg19Milestone'
+
+
+
+The data directory is ../Data/threshold 
+ Starting Training.
+[1,   200] loss: 3.367 
+[1,   400] loss: 3.047 
+[1,   600] loss: 2.951 
+[1,   800] loss: 2.825 
+[1,  1000] loss: 2.769 
+[1,  1200] loss: 2.666 
+[1,  1400] loss: 2.639 
+[1,  1600] loss: 2.491 
+[1,  1800] loss: 2.427 
+[1,  2000] loss: 2.405 
+[1,  2200] loss: 2.313 
+Accuracy of the network on the test images: 0.422 
+[2,   200] loss: 2.231 
+[2,   400] loss: 2.230 
+[2,   600] loss: 2.121 
+[2,   800] loss: 2.149 
+[2,  1000] loss: 2.073 
+[2,  1200] loss: 2.014 
+[2,  1400] loss: 1.991 
+[2,  1600] loss: 1.975 
+[2,  1800] loss: 1.959 
+[2,  2000] loss: 1.933 
+[2,  2200] loss: 1.935 
+Accuracy of the network on the test images: 0.497 
+[3,   200] loss: 1.806 
+[3,   400] loss: 1.788 
+[3,   600] loss: 1.725 
+[3,   800] loss: 1.760 
+[3,  1000] loss: 1.774 
+[3,  1200] loss: 1.754 
+[3,  1400] loss: 1.718 
+[3,  1600] loss: 1.716 
+[3,  1800] loss: 1.682 
+[3,  2000] loss: 1.656 
+[3,  2200] loss: 1.667 
+Accuracy of the network on the test images: 0.558 
+[4,   200] loss: 1.485 
+[4,   400] loss: 1.498 
+[4,   600] loss: 1.499 
+[4,   800] loss: 1.518 
+[4,  1000] loss: 1.503 
+[4,  1200] loss: 1.491 
+[4,  1400] loss: 1.492 
+[4,  1600] loss: 1.469 
+[4,  1800] loss: 1.460 
+[4,  2000] loss: 1.469 
+[4,  2200] loss: 1.451 
+Accuracy of the network on the test images: 0.591 
+[5,   200] loss: 1.250 
+[5,   400] loss: 1.253 
+[5,   600] loss: 1.274 
+[5,   800] loss: 1.257 
+[5,  1000] loss: 1.255 
+[5,  1200] loss: 1.222 
+[5,  1400] loss: 1.251 
+[5,  1600] loss: 1.260 
+[5,  1800] loss: 1.225 
+[5,  2000] loss: 1.245 
+[5,  2200] loss: 1.233 
+Accuracy of the network on the test images: 0.613 
+[6,   200] loss: 0.906 
+[6,   400] loss: 0.796 
+[6,   600] loss: 0.787 
+[6,   800] loss: 0.783 
+[6,  1000] loss: 0.753 
+[6,  1200] loss: 0.740 
+[6,  1400] loss: 0.748 
+[6,  1600] loss: 0.733 
+[6,  1800] loss: 0.718 
+[6,  2000] loss: 0.707 
+[6,  2200] loss: 0.721 
+Accuracy of the network on the test images: 0.644 
+[7,   200] loss: 0.653 
+[7,   400] loss: 0.635 
+[7,   600] loss: 0.623 
+[7,   800] loss: 0.627 
+[7,  1000] loss: 0.643 
+[7,  1200] loss: 0.634 
+[7,  1400] loss: 0.622 
+[7,  1600] loss: 0.622 
+[7,  1800] loss: 0.606 
+[7,  2000] loss: 0.601 
+[7,  2200] loss: 0.609 
+Accuracy of the network on the test images: 0.643 
+[8,   200] loss: 0.521 
+[8,   400] loss: 0.511 
+[8,   600] loss: 0.512 
+[8,   800] loss: 0.521 
+[8,  1000] loss: 0.530 
+[8,  1200] loss: 0.530 
+[8,  1400] loss: 0.520 
+[8,  1600] loss: 0.527 
+[8,  1800] loss: 0.529 
+[8,  2000] loss: 0.512 
+[8,  2200] loss: 0.534 
+Accuracy of the network on the test images: 0.643 
+[9,   200] loss: 0.432 
+[9,   400] loss: 0.428 
+[9,   600] loss: 0.409 
+[9,   800] loss: 0.428 
+[9,  1000] loss: 0.418 
+[9,  1200] loss: 0.438 
+[9,  1400] loss: 0.412 
+[9,  1600] loss: 0.431 
+[9,  1800] loss: 0.421 
+[9,  2000] loss: 0.409 
+[9,  2200] loss: 0.435 
+Accuracy of the network on the test images: 0.643 
+[10,   200] loss: 0.410 
+[10,   400] loss: 0.404 
+[10,   600] loss: 0.416 
+[10,   800] loss: 0.420 
+[10,  1000] loss: 0.392 
+[10,  1200] loss: 0.422 
+[10,  1400] loss: 0.409 
+[10,  1600] loss: 0.415 
+[10,  1800] loss: 0.403 
+[10,  2000] loss: 0.413 
+[10,  2200] loss: 0.410 
+Accuracy of the network on the test images: 0.644 
+Finished Training 
+Model saved to ../Doc/Vgg19Milestone.pth 

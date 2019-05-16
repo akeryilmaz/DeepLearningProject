@@ -1,3 +1,46 @@
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+import torch
+import torchvision
+import torchvision.transforms as transforms
+from torch.optim.lr_scheduler import MultiStepLR
+
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from torch.utils.data.sampler import SubsetRandomSampler
+
+BATCHSIZE = 256
+
+normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+																		std=[0.229, 0.224, 0.225])
+TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
+																			transforms.ToTensor(),
+																			normalize,
+																			])
+																			
+PRINT_FREQ = 200
+
+MODEL = torchvision.models.resnet18
+
+RESNETS = ["resnet18-1", "resnet18SplitData","resnet18Epoch30", "resnet18SplitWithNonlandmarkData", "resnet18SplitWithNonlandmarkDataBatchsize256", "resnet50Epoch10", "resnet50Milestone", "resnet101Milestone"]
+
+DENSENETS = ["Densenet121Milestone"]
+
+VGGS = ["Vgg16Milestone"]
+
+
+device = torch.device('cuda:0')
+#device = torch.device('cpu')
+
+if os.path.isdir('../Data/threshold'):
+        data_dir = '../Data/threshold'
+else:
+        #TODO Change the error given here.
+        raise Exception("Data directry not found!")
 
 def load_test(datadir):
         test_transforms = TESTTRANSFORMS
@@ -30,3 +73,57 @@ def compute_accuracy_and_GAP(net, testloader, return_result):
 		return correct / total, gap, result
 	else:
 		return correct / total, gap
+
+
+
+
+testloader = load_test(data_dir)
+
+for RESNET in RESNETS:
+        filename = "../Doc/Models/"+ RESNET + ".pth"
+
+        # TODO Check the below code :)
+        net = MODEL()
+        net.fc = nn.Linear(net.fc.in_features, 47)
+        net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))
+        net.to(device)
+        print('Model loaded from %s \n' % filename)
+
+        accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
+        print('Accuracy of the network on the test images: %.3f' % accuracy)
+        print('GAP of the network on the test images: %.3f' % gap)
+        result.to_csv("../Doc/Models/" + RESNET + ".csv" )
+        
+for DENSENET in DENSENETS:
+        filename = "../Doc/Models/"+ DENSENET + ".pth"
+        
+        net = MODEL(pretrained = PRETRAINED)
+        net.classifier = nn.Linear(net.classifier.in_features, 47)
+        net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))
+        net.to(device)
+        print('Model loaded from %s \n' % filename)
+
+        accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
+        print('Accuracy of the network on the test images: %.3f' % accuracy)
+        print('GAP of the network on the test images: %.3f' % gap)
+        result.to_csv("../Doc/Models/" + DENSENET + ".csv" )
+        
+for VGG in VGGS:
+        filename = "../Doc/Models/"+ VGG + ".pth"
+        
+        net = MODEL(pretrained = PRETRAINED)
+        net.classifier[6] = nn.Linear(net.classifier[6].in_features, 47)
+        net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))
+        net.to(device)
+        print('Model loaded from %s \n' % filename)
+
+        accuracy, conf, pred, true = compute_accuracy(net, testloader)
+        print('Accuracy of the network on the test images: %.3f' % accuracy)
+
+        gap, x = GAP_vector(pred, conf, true, return_x = True)
+
+        print('GAP of the network on the test images: %.3f' % gap)
+
+        x.to_csv("../Doc/Models/" + VGG + ".csv" )
+
+

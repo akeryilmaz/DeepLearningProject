@@ -21,10 +21,6 @@ TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
 																			transforms.ToTensor(),
 																			normalize,
 																			])
-																			
-PRINT_FREQ = 200
-
-MODEL = torchvision.models.resnet18
 
 RESNETS = ["resnet18-1", "resnet18SplitData","resnet18Epoch30", "resnet18SplitWithNonlandmarkData", "resnet18SplitWithNonlandmarkDataBatchsize256", "resnet50Epoch10", "resnet50Milestone", "resnet101Milestone"]
 
@@ -80,50 +76,62 @@ def compute_accuracy_and_GAP(net, testloader, return_result):
 testloader = load_test(data_dir)
 
 for RESNET in RESNETS:
-        filename = "../Doc/Models/"+ RESNET + ".pth"
+	filename = "../Doc/Models/"+ RESNET + ".pth"
+	if RESNET[:8] == "resnet18":
+		MODEL = torchvision.models.resnet18
+	else if RESNET[:8] == "resnet50":
+		MODEL = torchvision.models.resnet50
+	else:
+		MODEL = torchvision.models.resnet101
 
-        # TODO Check the below code :)
-        net = MODEL()
-        net.fc = nn.Linear(net.fc.in_features, 47)
-        net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))
-        net.to(device)
-        print('Model loaded from %s \n' % filename)
+	# TODO Check the below code :)
+	net = MODEL()
+	net.fc = nn.Linear(net.fc.in_features, 47)
+	net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))
+	net.to(device)
+	print('Model loaded from %s \n' % filename)
 
-        accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
-        print('Accuracy of the network on the test images: %.3f' % accuracy)
-        print('GAP of the network on the test images: %.3f' % gap)
-        result.to_csv("../Doc/Models/" + RESNET + ".csv" )
+	accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
+	print('Accuracy of the network on the test images: %.3f' % accuracy)
+	print('GAP of the network on the test images: %.3f' % gap)
+	result.to_csv("../Doc/Models/" + RESNET + ".csv" )
         
 for DENSENET in DENSENETS:
-        filename = "../Doc/Models/"+ DENSENET + ".pth"
-        
-        net = MODEL(pretrained = PRETRAINED)
-        net.classifier = nn.Linear(net.classifier.in_features, 47)
-        net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))
-        net.to(device)
-        print('Model loaded from %s \n' % filename)
+	if DENSENET[:11] == "Densenet121" or DENSENET[:11] == "densenet121":
+		MODEL = torchvision.models.densenet121
+	if DENSENET[:11] == "Densenet169" or DENSENET[:11] == "densenet169":
+		MODEL = torchvision.models.densenet169
+	else:
+		MODEL = torchvision.models.densenet201
+	filename = "../Doc/Models/"+ DENSENET + ".pth"
 
-        accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
-        print('Accuracy of the network on the test images: %.3f' % accuracy)
-        print('GAP of the network on the test images: %.3f' % gap)
-        result.to_csv("../Doc/Models/" + DENSENET + ".csv" )
+	net = MODEL(pretrained = PRETRAINED)
+	net.classifier = nn.Linear(net.classifier.in_features, 47)
+	net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))
+	net.to(device)
+	print('Model loaded from %s \n' % filename)
+
+	accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
+	print('Accuracy of the network on the test images: %.3f' % accuracy)
+	print('GAP of the network on the test images: %.3f' % gap)
+	result.to_csv("../Doc/Models/" + DENSENET + ".csv" )
         
 for VGG in VGGS:
-        filename = "../Doc/Models/"+ VGG + ".pth"
-        
-        net = MODEL(pretrained = PRETRAINED)
-        net.classifier[6] = nn.Linear(net.classifier[6].in_features, 47)
-        net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))
-        net.to(device)
-        print('Model loaded from %s \n' % filename)
+	if VGG [:5] == "Vgg16" or VGG [:5] == "vgg16":
+		MODEL = torchvision.models.vgg16
+	else:
+		MODEL = torchvision.models.vgg19
+	filename = "../Doc/Models/"+ VGG + ".pth"
 
-        accuracy, conf, pred, true = compute_accuracy(net, testloader)
-        print('Accuracy of the network on the test images: %.3f' % accuracy)
+	net = MODEL(pretrained = PRETRAINED)
+	net.classifier[6] = nn.Linear(net.classifier[6].in_features, 47)
+	net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))
+	net.to(device)
+	print('Model loaded from %s \n' % filename)
 
-        gap, x = GAP_vector(pred, conf, true, return_x = True)
-
-        print('GAP of the network on the test images: %.3f' % gap)
-
-        x.to_csv("../Doc/Models/" + VGG + ".csv" )
+	accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
+	print('Accuracy of the network on the test images: %.3f' % accuracy)
+	print('GAP of the network on the test images: %.3f' % gap)
+	result.to_csv("../Doc/Models/" + VGG + ".csv" )
 
 

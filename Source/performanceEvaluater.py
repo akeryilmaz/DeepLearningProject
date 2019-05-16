@@ -77,14 +77,13 @@ testloader = load_test(data_dir)
 
 for RESNET in RESNETS:
 	filename = "../Doc/Models/"+ RESNET + ".pth"
-	if RESNET[:8] == "resnet18":
+	if RESNET[:8] == "resnet18" or RESNET[:8] == "Resnet18":
 		MODEL = torchvision.models.resnet18
-	else if RESNET[:8] == "resnet50":
+	else if RESNET[:8] == "resnet50" or RESNET[:8] == "Resnet50":
 		MODEL = torchvision.models.resnet50
 	else:
 		MODEL = torchvision.models.resnet101
 
-	# TODO Check the below code :)
 	net = MODEL()
 	net.fc = nn.Linear(net.fc.in_features, 47)
 	net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))

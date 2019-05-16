@@ -64,9 +64,9 @@ def compute_accuracy_and_GAP(net, testloader, return_result):
 	result['term'] = result.prec_k * result.correct
 	gap = result.term.sum() / result.true.count()
 	if return_result:
-		return accuracy, gap, result
+		return correct / total, gap, result
 	else:
-		return accuracy, gap
+		return correct / total, gap
 
 testloader = load_test(data_dir)
 

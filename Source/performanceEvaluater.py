@@ -22,15 +22,15 @@ TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
 																			normalize,
 																			])
 
-MODEL = torchvision.models.resnet18
-FILENAME = 'resnet18Pretrained'
+MODEL = torchvision.models.densenet121
+FILENAME = 'densenet121SplitData'
 
 
 device = torch.device('cuda:0')
 #device = torch.device('cpu')
 
-if os.path.isdir('../Data/threshold'):
-	data_dir = '../Data/threshold'
+if os.path.isdir('../Data/splitDataNonlandmark/test'):
+	data_dir = '../Data/splitDataNonlandmark/test'
 else:
 	#TODO Change the error given here.
 	raise Exception("Data directry not found!")
@@ -43,71 +43,45 @@ def load_test(datadir):
 									shuffle=True, batch_size=BATCHSIZE)
 	return testloader
 
-def compute_accuracy(net, testloader):
+def compute_accuracy_and_GAP(net, testloader, return_result):
 	net.eval()
 	correct = 0
 	total = 0
-	confidences = []
-	predictions = []
-	true_labels = [] 
+	result = pd.DataFrame(columns = ["pred", "conf", "true"])
 	with torch.no_grad():
-		for images, labels in testloader:
+		for i, (images, labels) in enumerate(testloader):
+			print (i)
 			images, labels = images.to(device), labels.to(device)
 			outputs = net(images)
 			confidence, predicted = torch.max(outputs.data, 1)
 			total += labels.size(0)
 			correct += (predicted == labels).sum().item()
-			confidences.append(confidence)
-			predictions.append(predictions)
-			true_labels.append(labels)
-	return correct / total, np.array(confidences), np.array(predictions), np.array(true_labels)
-
-def GAP_vector(pred, conf, true, return_x=False):
-    '''
-    Compute Global Average Precision (aka micro AP), the metric for the
-    Google Landmark Recognition competition. 
-    This function takes predictions, labels and confidence scores as vectors.
-    In both predictions and ground-truth, use None/np.nan for "no label".
-
-    Args:
-        pred: vector of integer-coded predictions
-        conf: vector of probability or confidence scores for pred
-        true: vector of integer-coded labels for ground truth
-        return_x: also return the data frame used in the calculation
-
-    Returns:
-        GAP score
-    '''
-    x = pd.DataFrame({'pred': pred, 'conf': conf, 'true': true})
-    x.sort_values('conf', ascending=False, inplace=True, na_position='last')
-    x['correct'] = (x.true == x.pred).astype(int)
-    x['prec_k'] = x.correct.cumsum() / (np.arange(len(x)) + 1)
-    x['term'] = x.prec_k * x.correct
-    gap = x.term.sum() / x.true.count()
-    if return_x:
-        return gap, x
-    else:
-        return gap
+			temp = pd.DataFrame({"pred":predicted.cpu(), "conf":confidence.cpu(), "true":labels.cpu()})
+			result = result.append(temp, ignore_index = True)
+	result.sort_values('conf', ascending=False, inplace=True, na_position='last')
+	result['correct'] = (result.true == result.pred).astype(int)
+	result['prec_k'] = result.correct.cumsum() / (np.arange(len(result)) + 1)
+	result['term'] = result.prec_k * result.correct
+	gap = result.term.sum() / result.true.count()
+	if return_result:
+		return accuracy, gap, result
+	else:
+		return accuracy, gap
 
 testloader = load_test(data_dir)
 
 filename = "../Doc/Models/"+ FILENAME + ".pth"
 
-# TODO Check the below code :)
 net = MODEL()
-net.fc = nn.Linear(net.fc.in_features, 47)
+net.classifier = nn.Linear(net.classifier.in_features, 47)
 net.load_state_dict(torch.load(filename, map_location=lambda storage, loc: storage))
 net.to(device)
 print('Model loaded from %s \n' % filename)
 
-accuracy, conf, pred, true = compute_accuracy(net, testloader)
+accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
 print('Accuracy of the network on the test images: %.3f' % accuracy)
-
-gap, x = GAP_vector(pred, conf, true, return_x = True)
-
 print('GAP of the network on the test images: %.3f' % gap)
-
-print(x)
+result.to_csv("../Doc/densenet121SplitDataTestResults.csv")
 
 
 

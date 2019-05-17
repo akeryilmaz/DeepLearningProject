@@ -23,24 +23,30 @@ def load_test(datadir):
 					        shuffle=True, batch_size=BATCHSIZE)
   return testloader
 
-def compute_accuracy_and_GAP(net, testloader, return_result):
+def compute_accuracy_and_GAP(net, testloader, return_result = False):
 	correct = 0
 	total = 0
-	result = pd.DataFrame(columns = ["pred", "conf", "true"])
+	result = pd.DataFrame(columns = ["pred", "conf", "true", "ifNonlandmark"])
+	numberOfBatches = len(testloader)
 	with torch.no_grad():
 		for i, (images, labels) in enumerate(testloader):
-			print(i)
+			print("Batch %d is being processed out of %d batches", i, numberOfBatches)
 			images, labels = images.to(DEVICE), labels.to(DEVICE)
-			confidence, predicted = net.get_prediction(images)
+			confidence, predicted, ifNonlandmarkList = net.get_prediction(images)
 			total += labels.size(0)
 			correct += (predicted == labels).sum().item()
-			temp = pd.DataFrame({"pred":predicted.cpu(), "conf":confidence.cpu(), "true":labels.cpu()})
+			temp = pd.DataFrame({"pred":predicted.cpu(), "conf":confidence.cpu(), "true":labels.cpu(), "ifNonlandmark": [1 if iflandmark else 0 for iflandmark in ifNonlandmarkList]})
 			result = result.append(temp, ignore_index = True)
 	result.sort_values('conf', ascending=False, inplace=True, na_position='last')
 	result['correct'] = (result.true == result.pred).astype(int)
 	result['prec_k'] = result.correct.cumsum() / (np.arange(len(result)) + 1)
 	result['term'] = result.prec_k * result.correct
+	result.to_csv("../Doc/Results/" + modelname + "NonlandmarkModelTest.csv" )
 	gap = result.term.sum() / result.true.count()
+	print('GAP of the network on the test images: %.3f' % gap)
+	m = result.ifNonlandmark.get_values().sum()
+	n = np.logical_and((1 - result.correct.get_values()), (result.ifNonlandmark.get_values())).astype(int).sum()
+	print("%d of %d Nonlandmarks are classified false.", n, m)
 	if return_result:
 		return correct / total, gap, result
 	else:
@@ -56,7 +62,7 @@ if __name__ == "__main__":
 																				normalize,
 																				])
 
-	MODELS = ["densenet121SplitData","densenet121SplitDataWithNonlandmark"]
+	MODELS = ["densenet121SplitDataWithNonlandmark" , "densenet121SplitData"]
 
 	DEVICE = torch.device('cuda:0')
 	#DEVICE = torch.device('cpu')
@@ -67,10 +73,9 @@ if __name__ == "__main__":
 
 	for modelname in MODELS:
 		net = NonlandmarkModel(modelname, DEVICE)
-		accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
+		accuracy, gap, result = compute_accuracy_and_GAP(net, testloader)
 		print('Accuracy of the network on the test images: %.3f' % accuracy)
 		print('GAP of the network on the test images: %.3f' % gap)
-		result.to_csv("../Doc/Results/" + modelname + "NonlandmarkModelTest.csv" )
   
 
 

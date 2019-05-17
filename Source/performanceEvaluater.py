@@ -56,7 +56,7 @@ if __name__ == "__main__":
 																				normalize,
 																				])
 
-	MODELS = ["densenet121SplitData", "densenet121SplitDataWithNonlandmark"]
+	MODELS = ["densenet121SplitData","densenet121SplitDataWithNonlandmark"]
 
 	DEVICE = torch.device('cuda:0')
 	#DEVICE = torch.device('cpu')

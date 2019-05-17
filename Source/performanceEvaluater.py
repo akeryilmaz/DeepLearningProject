@@ -13,26 +13,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data.sampler import SubsetRandomSampler
 from NetworkLoader import *
-
-BATCHSIZE = 256
-
-normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-																		std=[0.229, 0.224, 0.225])
-TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
-																			transforms.ToTensor(),
-																			normalize,
-																			])
-
-MODELS = ["Densenet169Milestone"]
-
-
-device = torch.device('cuda:0')
-#device = torch.device('cpu')
-
-if os.path.isdir('../Data/threshold'):
-  data_dir = '../Data/threshold'
-else:
-  raise Exception("Data directry not found!")
+from NonlandmarkModel import *
 
 def load_test(datadir):
   test_transforms = TESTTRANSFORMS
@@ -48,9 +29,9 @@ def compute_accuracy_and_GAP(net, testloader, return_result):
 	result = pd.DataFrame(columns = ["pred", "conf", "true"])
 	with torch.no_grad():
 		for i, (images, labels) in enumerate(testloader):
-			images, labels = images.to(device), labels.to(device)
-			outputs = net.get_prediction(images)
-			confidence, predicted = torch.max(outputs.data, 1)
+			print(i)
+			images, labels = images.to(DEVICE), labels.to(DEVICE)
+			confidence, predicted = net.get_prediction(images)
 			total += labels.size(0)
 			correct += (predicted == labels).sum().item()
 			temp = pd.DataFrame({"pred":predicted.cpu(), "conf":confidence.cpu(), "true":labels.cpu()})
@@ -65,14 +46,31 @@ def compute_accuracy_and_GAP(net, testloader, return_result):
 	else:
 		return correct / total, gap
 
-testloader = load_test(data_dir)
+if __name__ == "__main__":
+	BATCHSIZE = 256
 
-for modelname in MODELS:
-	net = LoadedNetwork(modelname, device)
-	accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
-	print('Accuracy of the network on the test images: %.3f' % accuracy)
-	print('GAP of the network on the test images: %.3f' % gap)
-	result.to_csv("../Doc/Results/" + modelname + ".csv" )
+	normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+																			std=[0.229, 0.224, 0.225])
+	TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
+																				transforms.ToTensor(),
+																				normalize,
+																				])
+
+	MODELS = ["densenet121SplitData", "densenet121SplitDataWithNonlandmark"]
+
+	DEVICE = torch.device('cuda:0')
+	#DEVICE = torch.device('cpu')
+
+	DATA_DIR = '../Data/splitDataNonlandmark/test'
+
+	testloader = load_test(DATA_DIR)
+
+	for modelname in MODELS:
+		net = NonlandmarkModel(modelname, DEVICE)
+		accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result = True)
+		print('Accuracy of the network on the test images: %.3f' % accuracy)
+		print('GAP of the network on the test images: %.3f' % gap)
+		result.to_csv("../Doc/Results/" + modelname + "NonlandmarkModelTest.csv" )
   
 
 

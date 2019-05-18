@@ -1,6 +1,7 @@
 import torch
 import torchvision
 import torch.nn as nn
+from Network import *
 
 class LoadedNetwork:
 	def __init__(self, modelname, device):

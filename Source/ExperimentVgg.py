@@ -27,17 +27,17 @@ TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
 																			normalize,
 																			])
 
-MODEL = torchvision.models.vgg16
+MODEL = torchvision.models.vgg19
 PRETRAINED = False
 LOSS = nn.CrossEntropyLoss
 OPTIMIZER = optim.Adam
-LEARNINGRATE = 0.01
+LEARNINGRATE = 0.0001
 TRAINING_MILESTONES = [5,8]
 LR_GAMMA = 0.1
 
 NUMEPOCHS = 10
 PRINT_FREQ = 200
-FILENAME = 'Vgg16Milestone'
+FILENAME = 'Vgg19Milestone'
 
 #Set this to True if model is already trained
 skip_training = False
@@ -179,6 +179,7 @@ else:
 	print('Model loaded from %s' % filename)
 
 log.close() 
+
 
 
 

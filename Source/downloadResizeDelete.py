@@ -91,7 +91,7 @@ def main(args):
     if not os.path.exists(os.path.join(args.target_dir, 'raw_images')):
         os.mkdir(os.path.join(args.target_dir, 'raw_images'))
     
-    indexes = [317] + list(range(329, 350))
+    indexes = list(range(28, 30)) + list(range(97, 100))
     func = partial(process_tar_file, target_dir=args.target_dir, resized_dir=args.resized_dir)
     with Pool(args.processes) as p:
         for _ in tqdm(p.imap(func, indexes), total=len(indexes), desc='TAR files'):
@@ -102,5 +102,5 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('--target_dir', default=r'D:\temp\landmarks_recognition\images\train')
     p.add_argument('--resized_dir', default=r'D:\temp\landmarks_recognition\images\train\images_448')
-    p.add_argument('--processes', type=int, default=1)
+    p.add_argument('--processes', type=int, default=5)
 main(p.parse_args())

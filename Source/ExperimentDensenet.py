@@ -15,6 +15,7 @@ import torch.optim as optim
 from torch.utils.data.sampler import SubsetRandomSampler
 
 BATCHSIZE = 32
+SPLIT_RATIO = 1.0/8.0
 
 normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
 																		std=[0.229, 0.224, 0.225])
@@ -27,26 +28,27 @@ TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
 																			normalize,
 																			])
 
-MODEL = torchvision.models.densenet121
+MODEL = torchvision.models.densenet201
 PRETRAINED = False
 LOSS = nn.CrossEntropyLoss
 OPTIMIZER = optim.Adam
 LEARNINGRATE = 0.01
-TRAINING_MILESTONES = [5,7]
+TRAINING_MILESTONES = [5,8]
 LR_GAMMA = 0.1
 
 NUMEPOCHS = 10
 PRINT_FREQ = 200
-FILENAME = 'densenet121SplitDataWithNonlandmark'
+FILENAME = 'Densenet201Milestone'
 
 #Set this to True if model is already trained
 skip_training = False
 
 log = open("../Doc/Logs/" + FILENAME + ".txt","w+")
 
-if os.path.isdir('../Data/splitDataNonlandmark'):
-	data_dir = '../Data/splitDataNonlandmark'
+if os.path.isdir('../Data/threshold'):
+	data_dir = '../Data/threshold'
 else:
+	#TODO Change the error given here.
 	raise Exception("Data directry not found!")
 
 log.write('The data directory is %s' % data_dir)
@@ -60,20 +62,31 @@ if skip_training:
   # The models are always evaluated on CPU
   device = torch.device("cpu")
 
-def load_train_test(datadir):
+#TODO: Test below function
+
+def load_split_train_test(datadir, valid_size = SPLIT_RATIO):
+
 	train_transforms = TRAINTRANSFORMS
 
 	test_transforms = TESTTRANSFORMS
 
-	train_data = torchvision.datasets.ImageFolder(datadir + "/train",
+	train_data = torchvision.datasets.ImageFolder(datadir,
 									transform=train_transforms)
-	test_data = torchvision.datasets.ImageFolder(datadir + "/test",
+	test_data = torchvision.datasets.ImageFolder(datadir,
 									transform=test_transforms)
 
+	num_train = len(train_data)
+	indices = list(range(num_train))
+	split = int(np.floor(valid_size * num_train))
+	np.random.shuffle(indices)
+
+	train_idx, test_idx = indices[split:], indices[:split]
+	train_sampler = SubsetRandomSampler(train_idx)
+	test_sampler = SubsetRandomSampler(test_idx)
 	trainloader = torch.utils.data.DataLoader(train_data,
-									shuffle=True, batch_size=BATCHSIZE)
+									sampler=train_sampler, batch_size=BATCHSIZE)
 	testloader = torch.utils.data.DataLoader(test_data,
-									shuffle=True, batch_size=BATCHSIZE)
+									sampler=test_sampler, batch_size=BATCHSIZE)
 	return trainloader, testloader
 
 
@@ -91,7 +104,7 @@ def compute_accuracy(net, testloader):
 			correct += (predicted == labels).sum().item()
 	return correct / total
 
-trainloader, testloader = load_train_test(data_dir)
+trainloader, testloader = load_split_train_test(data_dir)
 
 net = MODEL(pretrained = PRETRAINED)
 net.classifier = nn.Linear(net.classifier.in_features, 47)
@@ -146,7 +159,7 @@ log.write('Finished Training \n')
 print('Finished Training')
 
 # Save the network to a file
-filename = "../Doc/"+ FILENAME + ".pth"
+filename = "../Doc/Models/"+ FILENAME + ".pth"
 if not skip_training:
 	try:
 		do_save = input('Do you want to save the model (type yes to confirm)? ').lower()

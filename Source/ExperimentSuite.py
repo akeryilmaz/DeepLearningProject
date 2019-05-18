@@ -16,11 +16,11 @@ from performanceEvaluater import compute_accuracy_and_GAP
 from Network import *
 
 class ExperimentSuite:
-	def __init__(self, batchSize, trainTransforms, testTransforms, loss, optimizerType, logName, device):
+	def __init__(self, batchSize, trainTransforms, testTransforms, lossType, optimizerType, logName, device):
 		self.batchSize = batchSize
 		self.trainTransforms = trainTransforms
 		self.testTransforms = testTransforms
-		self.criterion = loss
+		self.lossType = lossType
 		self.optimizerType = optimizerType
 		self.log = open("../Doc/Logs/" + logName + ".txt","w+")
 		self.device = device
@@ -97,6 +97,7 @@ class ExperimentSuite:
 		
 		net.to(self.device)
 		optimizer = self.optimizerType(net.parameters(), lr)
+		criterion = self.lossType()
 		lr_scheduler = lr_schedulerType(optimizer, [5,8], gamma=0.1, last_epoch=-1)
 		print_every = printFreq  # mini-batches
 		net.train()
@@ -116,7 +117,7 @@ class ExperimentSuite:
 
 				# forward + backward + optimize
 				outputs = net(inputs)
-				loss = self.criterion(outputs, labels)
+				loss = criterion(outputs, labels)
 				loss.backward()
 				optimizer.step()
 
@@ -132,7 +133,7 @@ class ExperimentSuite:
 
 		network = Network(net, self.device)
 
-		accuracy, gap = compute_accuracy_and_GAP(network, testloader, return_result = False)
+		accuracy, gap = compute_accuracy_and_GAP(network, testloader, return_result = False, self.device)
 		print('Accuracy of the network on the test images: %.3f' % accuracy)
 		print('GAP of the network on the test images: %.3f' % gap)
 		self.log.write('Accuracy of the network on the test images: %.3f' % accuracy)
@@ -150,4 +151,5 @@ class ExperimentSuite:
 
 		return network, accuracy, gap
 		
+
 

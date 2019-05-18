@@ -23,7 +23,7 @@ def load_test(datadir):
 					        shuffle=True, batch_size=BATCHSIZE)
   return testloader
 
-def compute_accuracy_and_GAP(net, testloader, return_result = False, device):
+def compute_accuracy_and_GAP(net, testloader, device, return_result = False):
 	correct = 0
 	total = 0
 	result = pd.DataFrame(columns = ["pred", "conf", "true"])
@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
 	for modelname in MODELS:
 		net = NonlandmarkModel(modelname, DEVICE)
-		accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, return_result=True)
+		accuracy, gap, result = compute_accuracy_and_GAP(net, testloader, DEVICE, return_result=True)
 		print('Accuracy of the network on the test images: %.3f' % accuracy)
 		print('GAP of the network on the test images: %.3f' % gap)
 		result.to_csv("../Doc/Results/" + modelname + "NonlandmarkModelTest.csv")

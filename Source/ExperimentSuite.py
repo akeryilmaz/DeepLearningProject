@@ -133,7 +133,7 @@ class ExperimentSuite:
 
 		network = Network(net, self.device)
 
-		accuracy, gap = compute_accuracy_and_GAP(network, testloader, return_result = False, device = self.device)
+		accuracy, gap = compute_accuracy_and_GAP(network, testloader, device = self.device, return_result = False)
 		print('Accuracy of the network on the test images: %.3f' % accuracy)
 		print('GAP of the network on the test images: %.3f' % gap)
 		self.log.write('Accuracy of the network on the test images: %.3f' % accuracy)

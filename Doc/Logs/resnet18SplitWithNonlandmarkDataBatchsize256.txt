@@ -1,0 +1,151 @@
+
+BATCHSIZE = 256
+
+normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+																		std=[0.229, 0.224, 0.225])
+TRAINTRANSFORMS = transforms.Compose([transforms.Resize(224),
+
+transforms.RandomHorizontalFlip(),
+																		transforms.ToTensor(),
+																		normalize,
+																		])
+TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
+																			transforms.ToTensor(),
+																			normalize,
+																			])
+
+MODEL = torchvision.models.resnet18
+PRETRAINED = False
+LOSS = nn.CrossEntropyLoss
+OPTIMIZER = optim.Adam
+LEARNINGRATE = 0.01
+TRAINING_MILESTONES = [5,7]
+LR_GAMMA = 0.1
+
+NUMEPOCHS = 10
+PRINT_FREQ = 25
+FILENAME = 'resnet18SplitWithNonlandmarkDataBatchsize256'
+
+The data directory is ../Data/splitWithNonlandmarkStarting Training. 
+[1,    25] loss: 3.592 
+[1,    50] loss: 3.109 
+[1,    75] loss: 2.958 
+[1,   100] loss: 2.815 
+[1,   125] loss: 2.690 
+[1,   150] loss: 2.600 
+[1,   175] loss: 2.510 
+[1,   200] loss: 2.481 
+[1,   225] loss: 2.388 
+[1,   250] loss: 2.351 
+[1,   275] loss: 2.287 
+Accuracy of the network on the test images: 0.381 
+[2,    25] loss: 2.147 
+[2,    50] loss: 2.175 
+[2,    75] loss: 2.086 
+[2,   100] loss: 2.034 
+[2,   125] loss: 1.995 
+[2,   150] loss: 1.951 
+[2,   175] loss: 1.935 
+[2,   200] loss: 1.899 
+[2,   225] loss: 1.842 
+[2,   250] loss: 1.846 
+[2,   275] loss: 1.792 
+Accuracy of the network on the test images: 0.473 
+[3,    25] loss: 1.739 
+[3,    50] loss: 1.712 
+[3,    75] loss: 1.674 
+[3,   100] loss: 1.649 
+[3,   125] loss: 1.669 
+[3,   150] loss: 1.623 
+[3,   175] loss: 1.621 
+[3,   200] loss: 1.636 
+[3,   225] loss: 1.590 
+[3,   250] loss: 1.541 
+[3,   275] loss: 1.551 
+Accuracy of the network on the test images: 0.534 
+[4,    25] loss: 1.492 
+[4,    50] loss: 1.445 
+[4,    75] loss: 1.429 
+[4,   100] loss: 1.444 
+[4,   125] loss: 1.457 
+[4,   150] loss: 1.379 
+[4,   175] loss: 1.401 
+[4,   200] loss: 1.371 
+[4,   225] loss: 1.392 
+[4,   250] loss: 1.378 
+[4,   275] loss: 1.358 
+Accuracy of the network on the test images: 0.591 
+[5,    25] loss: 1.274 
+[5,    50] loss: 1.267 
+[5,    75] loss: 1.253 
+[5,   100] loss: 1.220 
+[5,   125] loss: 1.259 
+[5,   150] loss: 1.241 
+[5,   175] loss: 1.227 
+[5,   200] loss: 1.205 
+[5,   225] loss: 1.222 
+[5,   250] loss: 1.200 
+[5,   275] loss: 1.178 
+Accuracy of the network on the test images: 0.620 
+[6,    25] loss: 1.036 
+[6,    50] loss: 0.950 
+[6,    75] loss: 0.927 
+[6,   100] loss: 0.953 
+[6,   125] loss: 0.903 
+[6,   150] loss: 0.877 
+[6,   175] loss: 0.875 
+[6,   200] loss: 0.863 
+[6,   225] loss: 0.887 
+[6,   250] loss: 0.875 
+[6,   275] loss: 0.897 
+Accuracy of the network on the test images: 0.711 
+[7,    25] loss: 0.827 
+[7,    50] loss: 0.815 
+[7,    75] loss: 0.821 
+[7,   100] loss: 0.791 
+[7,   125] loss: 0.821 
+[7,   150] loss: 0.833 
+[7,   175] loss: 0.815 
+[7,   200] loss: 0.804 
+[7,   225] loss: 0.799 
+[7,   250] loss: 0.813 
+[7,   275] loss: 0.805 
+Accuracy of the network on the test images: 0.718 
+[8,    25] loss: 0.732 
+[8,    50] loss: 0.739 
+[8,    75] loss: 0.741 
+[8,   100] loss: 0.739 
+[8,   125] loss: 0.720 
+[8,   150] loss: 0.698 
+[8,   175] loss: 0.718 
+[8,   200] loss: 0.709 
+[8,   225] loss: 0.716 
+[8,   250] loss: 0.734 
+[8,   275] loss: 0.742 
+Accuracy of the network on the test images: 0.728 
+[9,    25] loss: 0.722 
+[9,    50] loss: 0.714 
+[9,    75] loss: 0.706 
+[9,   100] loss: 0.715 
+[9,   125] loss: 0.710 
+[9,   150] loss: 0.674 
+[9,   175] loss: 0.706 
+[9,   200] loss: 0.711 
+[9,   225] loss: 0.708 
+[9,   250] loss: 0.721 
+[9,   275] loss: 0.719 
+Accuracy of the network on the test images: 0.729 
+[10,    25] loss: 0.700 
+[10,    50] loss: 0.673 
+[10,    75] loss: 0.688 
+[10,   100] loss: 0.710 
+[10,   125] loss: 0.710 
+[10,   150] loss: 0.714 
+[10,   175] loss: 0.710 
+[10,   200] loss: 0.704 
+[10,   225] loss: 0.708 
+[10,   250] loss: 0.676 
+[10,   275] loss: 0.701 
+Accuracy of the network on the test images: 0.728 
+Finished Training 
+Model saved to ../Doc/resnet18SplitWithNonlandmarkDataBatchsize256.pth 

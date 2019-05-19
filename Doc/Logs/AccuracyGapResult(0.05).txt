@@ -1,0 +1,9 @@
+Model loaded from ../Doc/Models/resnet18SplitData.pth 
+
+Accuracy of the network on the test images: 0.706
+GAP of the network on the test images: 0.658
+Model loaded from ../Doc/Models/resnet18SplitWithNonlandmarkData.pth 
+
+Accuracy of the network on the test images: 0.727
+GAP of the network on the test images: 0.683
+

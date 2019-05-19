@@ -1,0 +1,121 @@
+The data directory for train data is ../Data/thresholdThe data directory for test data is ../Data/thresholdStarting Training. 
+[1,   400] loss: 3.007 
+[1,   800] loss: 2.378 
+[2,   400] loss: 1.993 
+[2,   800] loss: 1.813 
+[3,   400] loss: 1.612 
+[3,   800] loss: 1.545 
+[4,   400] loss: 1.400 
+[4,   800] loss: 1.345 
+[5,   400] loss: 1.233 
+[5,   800] loss: 1.204 
+[6,   400] loss: 0.947 
+[6,   800] loss: 0.906 
+[7,   400] loss: 0.839 
+[7,   800] loss: 0.840 
+[8,   400] loss: 0.778 
+[8,   800] loss: 0.781 
+[9,   400] loss: 0.716 
+[9,   800] loss: 0.706 
+[10,   400] loss: 0.702 
+[10,   800] loss: 0.707 
+Finished Training 
+Accuracy of the network on the test images: 0.738GAP of the network on the test images: 0.685Model not saved 
+Starting Training. 
+[1,   400] loss: 3.029 
+[1,   800] loss: 2.497 
+[2,   400] loss: 2.000 
+[2,   800] loss: 1.802 
+[3,   400] loss: 1.585 
+[3,   800] loss: 1.483 
+[4,   400] loss: 1.346 
+[4,   800] loss: 1.300 
+[5,   400] loss: 1.168 
+[5,   800] loss: 1.147 
+[6,   400] loss: 0.904 
+[6,   800] loss: 0.844 
+[7,   400] loss: 0.776 
+[7,   800] loss: 0.785 
+[8,   400] loss: 0.721 
+[8,   800] loss: 0.732 
+[9,   400] loss: 0.675 
+[9,   800] loss: 0.659 
+[10,   400] loss: 0.659 
+[10,   800] loss: 0.647 
+Finished Training 
+Accuracy of the network on the test images: 0.744GAP of the network on the test images: 0.690Model not saved 
+Starting Training. 
+[1,   400] loss: 3.093 
+[1,   800] loss: 2.398 
+[2,   400] loss: 2.005 
+[2,   800] loss: 1.853 
+[3,   400] loss: 1.644 
+[3,   800] loss: 1.569 
+[4,   400] loss: 1.426 
+[4,   800] loss: 1.349 
+[5,   400] loss: 1.238 
+[5,   800] loss: 1.195 
+[6,   400] loss: 0.943 
+[6,   800] loss: 0.871 
+[7,   400] loss: 0.810 
+[7,   800] loss: 0.795 
+[8,   400] loss: 0.741 
+[8,   800] loss: 0.737 
+[9,   400] loss: 0.664 
+[9,   800] loss: 0.668 
+[10,   400] loss: 0.648 
+[10,   800] loss: 0.650 
+Finished Training 
+Accuracy of the network on the test images: 0.744GAP of the network on the test images: 0.692Model not saved 
+Starting Training. 
+[1,   400] loss: 3.062 
+[1,   800] loss: 2.406 
+[2,   400] loss: 2.031 
+[2,   800] loss: 1.848 
+[3,   400] loss: 1.615 
+[3,   800] loss: 1.555 
+[4,   400] loss: 1.383 
+[4,   800] loss: 1.347 
+[5,   400] loss: 1.231 
+[5,   800] loss: 1.181 
+[6,   400] loss: 0.928 
+[6,   800] loss: 0.872 
+[7,   400] loss: 0.806 
+[7,   800] loss: 0.807 
+[8,   400] loss: 0.733 
+[8,   800] loss: 0.753 
+[9,   400] loss: 0.673 
+[9,   800] loss: 0.685 
+[10,   400] loss: 0.657 
+[10,   800] loss: 0.658 
+Finished Training 
+Accuracy of the network on the test images: 0.753GAP of the network on the test images: 0.700Model not saved 
+Starting Training. 
+[1,   400] loss: 3.041 
+[1,   800] loss: 2.404 
+[2,   400] loss: 1.995 
+[2,   800] loss: 1.843 
+[3,   400] loss: 1.667 
+[3,   800] loss: 1.582 
+[4,   400] loss: 1.446 
+[4,   800] loss: 1.409 
+[5,   400] loss: 1.279 
+[5,   800] loss: 1.256 
+[6,   400] loss: 0.975 
+[6,   800] loss: 0.923 
+[7,   400] loss: 0.858 
+[7,   800] loss: 0.862 
+[8,   400] loss: 0.789 
+[8,   800] loss: 0.809 
+[9,   400] loss: 0.722 
+[9,   800] loss: 0.698 
+[10,   400] loss: 0.700 
+[10,   800] loss: 0.701 
+Finished Training 
+Accuracy of the network on the test images: 0.749GAP of the network on the test images: 0.696Model not saved 
+
+Average accuracy is  0.7457258658806191
+Average GAP is  0.6927336726809603
+
+
+

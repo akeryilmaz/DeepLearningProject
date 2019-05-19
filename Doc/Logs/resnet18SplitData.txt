@@ -1,0 +1,194 @@
+
+BATCHSIZE = 32
+
+normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+																		std=[0.229, 0.224, 0.225])
+TRAINTRANSFORMS = transforms.Compose([transforms.Resize(224),
+																		transforms.ToTensor(),
+																		normalize,
+																		])
+TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
+																			transforms.ToTensor(),
+																			normalize,
+																			])
+
+MODEL = torchvision.models.resnet18
+PRETRAINED = False
+LOSS = nn.CrossEntropyLoss
+OPTIMIZER = optim.Adam
+LEARNINGRATE = 0.01
+TRAINING_MILESTONES = [5,8]
+LR_GAMMA = 0.1
+
+NUMEPOCHS = 10
+PRINT_FREQ = 200
+FILENAME = 'resnet18SplitData'
+
+
+The data directory is ../Data/splitDataStarting Training. 
+[1,   200] loss: 3.368 
+[1,   400] loss: 3.031 
+[1,   600] loss: 2.839 
+[1,   800] loss: 2.708 
+[1,  1000] loss: 2.630 
+[1,  1200] loss: 2.499 
+[1,  1400] loss: 2.376 
+[1,  1600] loss: 2.359 
+[1,  1800] loss: 2.235 
+Accuracy of the network on the test images: 0.401 
+[2,   200] loss: 2.125 
+[2,   400] loss: 2.081 
+[2,   600] loss: 2.035 
+[2,   800] loss: 1.994 
+[2,  1000] loss: 1.951 
+[2,  1200] loss: 1.933 
+[2,  1400] loss: 1.918 
+[2,  1600] loss: 1.835 
+[2,  1800] loss: 1.789 
+Accuracy of the network on the test images: 0.510 
+[3,   200] loss: 1.697 
+[3,   400] loss: 1.658 
+[3,   600] loss: 1.667 
+[3,   800] loss: 1.633 
+[3,  1000] loss: 1.606 
+[3,  1200] loss: 1.609 
+[3,  1400] loss: 1.594 
+[3,  1600] loss: 1.555 
+[3,  1800] loss: 1.543 
+Accuracy of the network on the test images: 0.538 
+[4,   200] loss: 1.433 
+[4,   400] loss: 1.455 
+[4,   600] loss: 1.412 
+[4,   800] loss: 1.393 
+[4,  1000] loss: 1.380 
+[4,  1200] loss: 1.389 
+[4,  1400] loss: 1.371 
+[4,  1600] loss: 1.379 
+[4,  1800] loss: 1.325 
+Accuracy of the network on the test images: 0.607 
+[5,   200] loss: 1.179 
+[5,   400] loss: 1.215 
+[5,   600] loss: 1.247 
+[5,   800] loss: 1.221 
+[5,  1000] loss: 1.228 
+[5,  1200] loss: 1.192 
+[5,  1400] loss: 1.248 
+[5,  1600] loss: 1.168 
+[5,  1800] loss: 1.199 
+Accuracy of the network on the test images: 0.612 
+[6,   200] loss: 0.953 
+[6,   400] loss: 0.891 
+[6,   600] loss: 0.838 
+[6,   800] loss: 0.825 
+[6,  1000] loss: 0.788 
+[6,  1200] loss: 0.808 
+[6,  1400] loss: 0.807 
+[6,  1600] loss: 0.774 
+[6,  1800] loss: 0.798 
+Accuracy of the network on the test images: 0.691 
+[7,   200] loss: 0.713 
+[7,   400] loss: 0.737 
+[7,   600] loss: 0.715 
+[7,   800] loss: 0.704 
+[7,  1000] loss: 0.722 
+[7,  1200] loss: 0.729 
+[7,  1400] loss: 0.699 
+[7,  1600] loss: 0.689 
+[7,  1800] loss: 0.721 
+Accuracy of the network on the test images: 0.697 
+[8,   200] loss: 0.647 
+[8,   400] loss: 0.639 
+[8,   600] loss: 0.655 
+[8,   800] loss: 0.642 
+[8,  1000] loss: 0.652 
+[8,  1200] loss: 0.635 
+[8,  1400] loss: 0.640 
+[8,  1600] loss: 0.645 
+[8,  1800] loss: 0.610 
+Accuracy of the network on the test images: 0.696 
+[9,   200] loss: 0.568 
+[9,   400] loss: 0.587 
+[9,   600] loss: 0.572 
+[9,   800] loss: 0.559 
+[9,  1000] loss: 0.552 
+[9,  1200] loss: 0.540 
+[9,  1400] loss: 0.549 
+[9,  1600] loss: 0.542 
+[9,  1800] loss: 0.539 
+Accuracy of the network on the test images: 0.708 
+[10,   200] loss: 0.531 
+[10,   400] loss: 0.527 
+[10,   600] loss: 0.547 
+[10,   800] loss: 0.538 
+[10,  1000] loss: 0.543 
+[10,  1200] loss: 0.533 
+[10,  1400] loss: 0.562 
+[10,  1600] loss: 0.555 
+[10,  1800] loss: 0.540 
+Accuracy of the network on the test images: 0.706 
+Finished Training 
+Model saved to ../Doc/resnet18SplitData.pth 
+
+'../Data/splitData/test'
+Model loaded from ../Doc/Models/resnet18SplitData.pth 
+
+Accuracy of the network on the test images: 0.706
+GAP of the network on the test images: 0.662
+
+
+
+
+
+
+
+Batch 1 is being processed out of 40 batches
+Batch 2 is being processed out of 40 batches
+Batch 3 is being processed out of 40 batches
+Batch 4 is being processed out of 40 batches
+Batch 5 is being processed out of 40 batches
+Batch 6 is being processed out of 40 batches
+Batch 7 is being processed out of 40 batches
+Batch 8 is being processed out of 40 batches
+Batch 9 is being processed out of 40 batches
+Batch 10 is being processed out of 40 batches
+Batch 11 is being processed out of 40 batches
+Batch 12 is being processed out of 40 batches
+Batch 13 is being processed out of 40 batches
+Batch 14 is being processed out of 40 batches
+Batch 15 is being processed out of 40 batches
+Batch 16 is being processed out of 40 batches
+Batch 17 is being processed out of 40 batches
+Batch 18 is being processed out of 40 batches
+Batch 19 is being processed out of 40 batches
+Batch 20 is being processed out of 40 batches
+Batch 21 is being processed out of 40 batches
+Batch 22 is being processed out of 40 batches
+Batch 23 is being processed out of 40 batches
+Batch 24 is being processed out of 40 batches
+Batch 25 is being processed out of 40 batches
+Batch 26 is being processed out of 40 batches
+Batch 27 is being processed out of 40 batches
+Batch 28 is being processed out of 40 batches
+Batch 29 is being processed out of 40 batches
+Batch 30 is being processed out of 40 batches
+Batch 31 is being processed out of 40 batches
+Batch 32 is being processed out of 40 batches
+Batch 33 is being processed out of 40 batches
+Batch 34 is being processed out of 40 batches
+Batch 35 is being processed out of 40 batches
+Batch 36 is being processed out of 40 batches
+Batch 37 is being processed out of 40 batches
+Batch 38 is being processed out of 40 batches
+Batch 39 is being processed out of 40 batches
+GAP of the network on the test images: 0.642
+155 of 384 Nonlandmarks are classified false.
+155 of 2995 false instances are classified as nonlandmark.
+Accuracy of the network on the test images: 0.706
+GAP of the network on the test images: 0.642
+
+
+
+
+
+
+

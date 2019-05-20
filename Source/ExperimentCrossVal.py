@@ -30,7 +30,7 @@ TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
 
 k = 5
 
-experiment = ExperimentSuite(32, TRAINTRANSFORMS, TESTTRANSFORMS, nn.CrossEntropyLoss, optim.Adam, logName = "DensenetCrossVal", device = torch.device('cuda:0'))
+experiment = ExperimentSuite(256, TRAINTRANSFORMS, TESTTRANSFORMS, nn.CrossEntropyLoss, optim.Adam, logName = "DensenetCrossVal", device = torch.device('cuda:0'))
 
 experiment.load_train('../Data/threshold')
 experiment.load_test('../Data/threshold')
@@ -40,15 +40,15 @@ experiment.shuffle_data_indices_k('../Data/threshold', k)
 accuracies = []
 gaps = []
 for i in range (k):
-	net = torchvision.models.densenet201(pretrained = False)
-	net.classifier = nn.Linear(net.classifier.in_features, 47)
+	net = torchvision.models.resnet18(pretrained = False)
+	net.fc = nn.Linear(net.fc.in_features, 47)
 
 	trainloader, testloader = experiment.load_split_train_test_kfold(i)
 
-	_, accuracy, gap = experiment.training(net, 0.01, MultiStepLR, 10, trainloader, testloader, do_save = "No", fileName = "", printFreq = 400)
-	accurasies.append(accuracy)
+	_, accuracy, gap = experiment.training(net, 0.01, MultiStepLR, 10, trainloader, testloader, do_save = "No", fileName = "", printFreq = 50)
+	accuracies.append(accuracy)
 	gaps.append(gap)
 
-print("Average accuracy is ", sum(accurasies)/k)
+print("Average accuracy is ", sum(accuracies)/k)
 print("Average GAP is ", sum(gaps)/k)
 	

@@ -22,4 +22,4 @@ class NonlandmarkModel:
 		for i in range(images_array.shape[0]):
 			if ifNonlandmarkList[i]:
 				confidence[i] *= 0.1
-		return confidence, predicted, ifNonlandmarkList
+		return confidence, predicted

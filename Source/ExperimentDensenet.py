@@ -28,12 +28,11 @@ TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
 																			])
 
 
-experiment = ExperimentSuite(32, TRAINTRANSFORMS, TESTTRANSFORMS, nn.CrossEntropyLoss, optim.Adam, logName = "VGG19", device = torch.device('cuda:0'))
+experiment = ExperimentSuite(32, TRAINTRANSFORMS, TESTTRANSFORMS, nn.CrossEntropyLoss, optim.Adam, logName = "Densenet201", device = torch.device('cuda:0'))
 
 trainloader, testloader = experiment.load_split_train_test('../Data/threshold', 1/8)
 
-net = torchvision.models.vgg19(pretrained = False)
-net.classifier[6] = nn.Linear(net.classifier[6].in_features, 47)
+net = torchvision.models.densenet201(pretrained = False)
+net.classifier = nn.Linear(net.classifier.in_features, 47)
 
-_, accuracy, gap = experiment.training(net, 0.0001, MultiStepLR, 10, trainloader, testloader, do_save = "yes", fileName = "VGG19", printFreq = 200)
-
+_, accuracy, gap = experiment.training(net, 0.01, MultiStepLR, 10, trainloader, testloader, do_save = "yes", fileName = "Densenet201", printFreq = 200)

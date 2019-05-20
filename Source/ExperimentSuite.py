@@ -98,7 +98,7 @@ class ExperimentSuite:
 		net.to(self.device)
 		optimizer = self.optimizerType(net.parameters(), lr)
 		criterion = self.lossType()
-		lr_scheduler = lr_schedulerType(optimizer, [5,8], gamma=0.1, last_epoch=-1)
+		lr_scheduler = lr_schedulerType(optimizer, [5,7], gamma=0.1, last_epoch=-1)
 		print_every = printFreq  # mini-batches
 		net.train()
 
@@ -144,10 +144,10 @@ class ExperimentSuite:
 		if do_save == 'yes':
 			torch.save(net.state_dict(), path)
 			print('Model saved to %s' % path)
-			log.write('Model saved to %s \n' % path)
+			self.log.write('Model saved to %s \n' % path)
 		else:
 			print('Model not saved')
-			log.write('Model not saved \n')
+			self.log.write('Model not saved \n')
 
 		return network, accuracy, gap
 		

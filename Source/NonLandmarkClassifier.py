@@ -12,7 +12,6 @@ def check_nonlandmark(images):
 	model = VGG16_Places365(weights='places')
 	data = pd.read_csv('../Doc/iflandmark.csv')
 
-	predictions = model.predict(images)
 	probs = np.sort(predictions)
 	classes = np.argsort(predictions)
 

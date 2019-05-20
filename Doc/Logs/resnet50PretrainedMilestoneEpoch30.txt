@@ -1,3 +1,31 @@
+
+
+BATCHSIZE = 32
+SPLIT_RATIO = 1.0/8.0
+
+normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+																		std=[0.229, 0.224, 0.225])
+TRAINTRANSFORMS = transforms.Compose([transforms.Resize(224),
+																		transforms.ToTensor(),
+																		normalize,
+																		])
+TESTTRANSFORMS = transforms.Compose([transforms.Resize(224),
+																			transforms.ToTensor(),
+																			normalize,
+																			])
+
+MODEL = torchvision.models.resnet50
+PRETRAINED = True
+LOSS = nn.CrossEntropyLoss
+OPTIMIZER = optim.Adam
+LEARNINGRATE = 0.01
+TRAINING_MILESTONES = [8, 16, 20, 24, 28]
+LR_GAMMA = 0.1
+
+NUMEPOCHS = 30
+PRINT_FREQ = 200
+FILENAME = 'resnet50PretrainedMilestoneEpoch30
+
 The data directory is ../Data/thresholdStarting Training. 
 [1,   200] loss: 3.503 
 [1,   400] loss: 3.075 

@@ -236,5 +236,5 @@ Accuracy of the network on the test images: 0.769
 Accuracy of the network on the test images: 0.765
 Finished Training
 Do you want to save the model (type yes to confirm)? yes
-Model saved to resnet50PretrainedBatch64.pth
+Model saved to resnet50PretrainedBatch64.pth ####PROBABLY FALSE#######
 Accuracy of the network on the test images: 0.765s

@@ -17,7 +17,7 @@ OPTIMIZER = optim.Adam
 LEARNINGRATE = 0.01
 NUMEPOCHS = 10
 PRINT_FREQ = 100
-FILENAME = 'resnet50Pretrained.pth'
+FILENAME = 'resnet50Pretrained.pth' #########Probably False###########
 
 The data directory is ../Data/threshold
 Starting Training.

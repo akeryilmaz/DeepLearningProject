@@ -7,18 +7,8 @@ LR_GAMMA = 0.1
 
 NUMEPOCHS = 30
 PRINT_FREQ = 400
-FILENAME = 'resnet50PretrainedEpoch30.pth'
+FILENAME = 'resnet50PretrainedEpoch30.pth' ######Probably Flase###########
 
-#Set this to True if model is already trained
-skip_training = False
-
-if os.path.isdir('../Data/threshold'):
-	data_dir = '../Data/threshold'
-else:
-	#TODO Change the error given here.
-	raise Exception("Data directry not found!")
-
-print('The data directory is %s' % data_dir)
 
 
 The data directory is ../Data/threshold
